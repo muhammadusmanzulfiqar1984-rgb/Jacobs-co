@@ -1647,31 +1647,108 @@ body .slide:nth-child(even) { background: linear-gradient(180deg, rgba(20,17,15,
 /* Reveal on enter */
 .slide.hgv-seen .ai { opacity: 1; transform: none; }
 
-/* ═══ APPLE-STYLE STICKY/SLIDING HEADER ═══ */
+/* ═══ APPLE-STYLE STICKY HEADER ═══
+   Apple's actual behavior: stays put, goes solid on scroll. No hide. */
 #hgv-nav {
   background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   border-bottom: 1px solid transparent !important;
-  transform: translateY(0);
   transition:
-    background-color .35s cubic-bezier(.2,.7,.2,1),
-    backdrop-filter .35s ease,
-    border-color .35s ease,
-    padding .35s ease,
-    transform .45s cubic-bezier(.2,.7,.2,1) !important;
-  will-change: transform, background-color;
+    background-color .4s cubic-bezier(.2,.7,.2,1),
+    backdrop-filter .4s ease,
+    -webkit-backdrop-filter .4s ease,
+    border-color .4s ease,
+    padding .35s ease !important;
+  will-change: background-color, backdrop-filter;
 }
 #hgv-nav.scrolled {
-  background: rgba(10,9,8,0.78) !important;
+  background: rgba(10,9,8,0.72) !important;
   backdrop-filter: saturate(180%) blur(20px) !important;
   -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
   border-bottom-color: rgba(201,162,74,0.18) !important;
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
 }
-#hgv-nav.hidden { transform: translateY(-100%); }
-#hgv-nav.scrolled .hgv-sub { opacity: 0; height: 0; overflow: hidden; }
+#hgv-nav.scrolled .hgv-sub { opacity: 0; max-height: 0; overflow: hidden; transition: all .3s; }
+
+/* ═══ HAMBURGER (mobile) ═══ */
+.hgv-burger {
+  display: none;
+  background: transparent; border: none;
+  width: 36px; height: 36px;
+  padding: 0; cursor: pointer;
+  flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+  margin-left: 8px;
+}
+.hgv-burger span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--hgv-gold, #c9a24a);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1), opacity .25s;
+  transform-origin: center;
+}
+.hgv-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hgv-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.hgv-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ═══ MOBILE DRAWER ═══ */
+.hgv-drawer {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10,9,8,0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 998;
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s, visibility 0s linear .35s;
+  padding: 80px 24px 40px;
+  overflow-y: auto;
+}
+.hgv-drawer.open {
+  opacity: 1; visibility: visible;
+  transition: opacity .35s, visibility 0s;
+}
+.hgv-drawer-inner { max-width: 480px; margin: 0 auto; }
+.hgv-drawer-group { margin-bottom: 28px; border-bottom: 1px solid rgba(201,162,74,0.15); padding-bottom: 20px; }
+.hgv-drawer-group:last-of-type { border-bottom: none; }
+.hgv-drawer-label {
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--hgv-gold, #c9a24a);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.hgv-drawer a {
+  display: block; padding: 14px 0;
+  font-family: var(--hgv-serif, 'Playfair Display'), serif;
+  font-size: 22px; font-weight: 500;
+  color: var(--hgv-ink, #f4ead5);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201,162,74,0.08);
+  transition: color .25s, padding-left .25s;
+}
+.hgv-drawer a:last-of-type { border-bottom: none; }
+.hgv-drawer a:hover, .hgv-drawer a:active { color: var(--hgv-gold, #c9a24a); padding-left: 8px; }
+.hgv-drawer-cta {
+  display: block !important;
+  margin-top: 16px !important;
+  padding: 16px 24px !important;
+  background: var(--hgv-gold, #c9a24a) !important;
+  color: #0a0908 !important;
+  border-radius: 8px !important;
+  text-align: center !important;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  border-bottom: none !important;
+}
+
+body.hgv-no-scroll { overflow: hidden; }
+
+@media (max-width: 980px) {
+  #hgv-nav .hgv-menu { display: none !important; }
+  .hgv-burger { display: flex !important; }
+  #hgv-nav .hgv-lang { display: none !important; }
+  #hgv-nav .hgv-login { display: none !important; }
+}
 
 /* ═══ MOBILE / RESPONSIVE ═══ */
 @media (max-width: 820px) {
@@ -1801,8 +1878,38 @@ body .slide:nth-child(even) { background: linear-gradient(180deg, rgba(20,17,15,
   <div class="hgv-right">
     <div class="hgv-lang"><span class="active">EN</span><i>|</i><span>ع</span></div>
     <a class="hgv-login" href="mailto:usman@harvics.com">Invest</a>
+    <button class="hgv-burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<!-- Mobile drawer -->
+<div class="hgv-drawer" aria-hidden="true">
+  <div class="hgv-drawer-inner">
+    <div class="hgv-drawer-group">
+      <div class="hgv-drawer-label">Vision</div>
+      <a href="#s1">Cover</a>
+      <a href="#s2">Who We Are</a>
+      <a href="#s5">Mission</a>
+      <a href="#s8">Brand Promise</a>
+    </div>
+    <div class="hgv-drawer-group">
+      <div class="hgv-drawer-label">Business</div>
+      <a href="#s10">Portfolio</a>
+      <a href="#s13">Operations</a>
+      <a href="#s16">Markets</a>
+      <a href="#s18">Partnerships</a>
+    </div>
+    <div class="hgv-drawer-group">
+      <div class="hgv-drawer-label">Financials</div>
+      <a href="#s20">Projections</a>
+      <a href="#s23">Jacobs &amp; Co IPO</a>
+      <a href="#s25">Contact</a>
+    </div>
+    <a class="hgv-drawer-cta" href="mailto:usman@harvics.com">Invest →</a>
+  </div>
+</div>
 <header class="apple-nav">
       <a href="http://localhost:8000/index.html#s1" class="brand">Harvics</a>
       <nav class="links">
@@ -4452,29 +4559,43 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   const first = document.querySelector('.slide'); if (first) first.classList.add('hgv-seen');
 })();
 
-// Apple-style sliding nav: solid on scroll, hide on scroll-down, show on scroll-up
+// Apple-style nav: transparent → solid frosted glass on scroll
 (function(){
   const nav = document.getElementById('hgv-nav');
   if (!nav) return;
-  let lastY = window.scrollY;
   let ticking = false;
   const update = () => {
-    const y = window.scrollY;
-    // Solid background after 40px
-    nav.classList.toggle('scrolled', y > 40);
-    // Hide when scrolling down past 200px, reveal when scrolling up
-    if (y > 200 && y > lastY + 4) {
-      nav.classList.add('hidden');
-    } else if (y < lastY - 4) {
-      nav.classList.remove('hidden');
-    }
-    lastY = y;
+    nav.classList.toggle('scrolled', window.scrollY > 40);
     ticking = false;
   };
   window.addEventListener('scroll', () => {
     if (!ticking) { requestAnimationFrame(update); ticking = true; }
   }, { passive: true });
   update();
+})();
+
+// Mobile drawer toggle
+(function(){
+  const burger = document.querySelector('.hgv-burger');
+  const drawer = document.querySelector('.hgv-drawer');
+  if (!burger || !drawer) return;
+  const close = () => {
+    burger.setAttribute('aria-expanded', 'false');
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('hgv-no-scroll');
+  };
+  const open = () => {
+    burger.setAttribute('aria-expanded', 'true');
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('hgv-no-scroll');
+  };
+  burger.addEventListener('click', () => {
+    drawer.classList.contains('open') ? close() : open();
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
 })();
 </script>
 
