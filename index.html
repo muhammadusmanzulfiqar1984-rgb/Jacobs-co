@@ -2196,6 +2196,9 @@ body.hgv-no-scroll { overflow: hidden; }
 <audio id="hgv-voice" preload="auto">
   <source src="david.mp3" type="audio/mpeg">
 </audio>
+<audio id="hgv-bgm" preload="auto" loop>
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
 <div id="hgv-unlock" aria-hidden="true">
   <span class="ring"></span><span class="ring"></span><span class="ring"></span><span class="ring"></span><span class="ring"></span>
 </div>
@@ -5296,8 +5299,26 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
     keypad.style.pointerEvents = 'none';
     if (unlock) { unlock.classList.add('active'); unlock.setAttribute('aria-hidden', 'false'); }
 
-    // Prime audio inside the user gesture (required for autoplay),
-    // then pause immediately and schedule real playback 10s later.
+    const bgm = document.getElementById('hgv-bgm');
+    const BGM_LOUD = 0.08;
+    const BGM_DUCK = 0.015;
+    const fadeTo = (audio, target, ms=1500) => {
+      if (!audio) return;
+      const start = audio.volume;
+      const t0 = performance.now();
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / ms);
+        audio.volume = start + (target - start) * k;
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    if (bgm) {
+      bgm.volume = 0;
+      bgm.play().then(() => fadeTo(bgm, BGM_LOUD, 2500)).catch(() => {});
+    }
+
     if (voice) {
       voice.volume = 1.0;
       voice.muted = true;
@@ -5305,13 +5326,16 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
         voice.pause();
         voice.currentTime = 0;
         voice.muted = false;
-        setTimeout(() => { voice.play().catch(()=>{}); }, 5000);
+        setTimeout(() => {
+          fadeTo(bgm, BGM_DUCK, 1500);
+          voice.play().catch(()=>{});
+        }, 5000);
       }).catch(() => {
-        // Autoplay rejected — schedule anyway; first scroll/tap will unlock
-        setTimeout(() => { voice.play().catch(()=>{}); }, 5000);
+        setTimeout(() => { fadeTo(bgm, BGM_DUCK, 1500); voice.play().catch(()=>{}); }, 5000);
         const kick = () => { voice.play().catch(()=>{}); document.removeEventListener('pointerdown', kick); };
         document.addEventListener('pointerdown', kick, { once: true });
       });
+      voice.addEventListener('ended', () => fadeTo(bgm, BGM_LOUD, 2000));
     }
 
     setTimeout(() => {
