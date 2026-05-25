@@ -1646,6 +1646,112 @@ body .slide:nth-child(even) { background: linear-gradient(180deg, rgba(20,17,15,
 
 /* Reveal on enter */
 .slide.hgv-seen .ai { opacity: 1; transform: none; }
+
+/* ═══ APPLE-STYLE STICKY/SLIDING HEADER ═══ */
+#hgv-nav {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid transparent !important;
+  transform: translateY(0);
+  transition:
+    background-color .35s cubic-bezier(.2,.7,.2,1),
+    backdrop-filter .35s ease,
+    border-color .35s ease,
+    padding .35s ease,
+    transform .45s cubic-bezier(.2,.7,.2,1) !important;
+  will-change: transform, background-color;
+}
+#hgv-nav.scrolled {
+  background: rgba(10,9,8,0.78) !important;
+  backdrop-filter: saturate(180%) blur(20px) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+  border-bottom-color: rgba(201,162,74,0.18) !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+#hgv-nav.hidden { transform: translateY(-100%); }
+#hgv-nav.scrolled .hgv-sub { opacity: 0; height: 0; overflow: hidden; }
+
+/* ═══ MOBILE / RESPONSIVE ═══ */
+@media (max-width: 820px) {
+  /* Hero text scaling */
+  #s1 .hero { font-size: clamp(28px, 8vw, 44px) !important; }
+  #s1 [style*="font-size:34px"] { font-size: 22px !important; }
+  #s1 [style*="font-size:18px"] { font-size: 14px !important; }
+  #s1 [style*="clamp(22px,2.3vw,32px)"] { font-size: 16px !important; }
+
+  /* Tighter slide padding */
+  .slide { padding: 90px 18px 60px !important; }
+  #s1 { padding: 0 !important; }
+
+  /* All multi-column grids collapse */
+  .tile-grid, .tile-grid.three-up, .tile-grid.four-up,
+  .g-6040, .g3, .grid-2, .grid-3, .grid-4,
+  [style*="grid-template-columns"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+  .fullbleed-grid {
+    grid-template-columns: 1fr !important;
+    padding: 0 !important;
+    gap: 14px !important;
+  }
+  .fullbleed-grid .tile { height: auto !important; min-height: 280px !important; }
+
+  /* Tables become scroll containers */
+  .tbl-chart-wrap, .tbl { width: 100% !important; overflow-x: auto !important; display: block !important; }
+  .tbl { font-size: 11px !important; }
+  .tbl th, .tbl td { padding: 8px 10px !important; }
+
+  /* Hero number stacks */
+  .num-hero, .stat-num { font-size: clamp(28px, 9vw, 42px) !important; }
+
+  /* Auto-chart shrinks */
+  .auto-chart { padding: 12px !important; }
+  .auto-chart svg { width: 100% !important; height: auto !important; }
+
+  /* Section headlines */
+  .hero, .h1, h1 { font-size: clamp(24px, 7vw, 38px) !important; line-height: 1.15 !important; }
+  .h2, h2 { font-size: clamp(18px, 5vw, 24px) !important; }
+  .body, .small { font-size: 14px !important; }
+
+  /* FABs slightly smaller */
+  .hgv-fab { width: 48px !important; height: 48px !important; right: 16px !important; }
+  .hgv-fab.chat { bottom: 76px !important; }
+  .hgv-fab.wa { bottom: 16px !important; }
+
+  /* Cards padding */
+  .slide .card, .slide .tile, .slide .stat-card,
+  .slide .ev-card, .slide .hier-box {
+    padding: 18px !important;
+  }
+
+  /* Hide cinematic overlays on mobile to save battery */
+  #hgv-grid, #hgv-aurora { opacity: 0.3 !important; }
+
+  /* Backdrop images lighter on small screens */
+  .slide::before { opacity: 0.20 !important; }
+}
+
+@media (max-width: 480px) {
+  .slide { padding: 80px 14px 50px !important; }
+  #hgv-nav { padding: 10px 14px !important; }
+  #hgv-nav .hgv-title { font-size: 10px !important; }
+  #hgv-nav .hgv-mark { width: 28px !important; height: 28px !important; font-size: 13px !important; }
+  #hgv-nav .hgv-login { padding: 6px 12px !important; font-size: 10px !important; letter-spacing: 0.14em !important; }
+  .hero, .h1, h1 { font-size: clamp(22px, 7vw, 32px) !important; }
+  #s1 .hero { font-size: clamp(24px, 8vw, 36px) !important; }
+
+  /* Mega menu becomes tap-to-toggle (already hidden < 540px) */
+  #hgv-nav .hgv-menu { display: none !important; }
+}
+
+/* Phones in landscape — keep more vertical room */
+@media (max-height: 500px) and (orientation: landscape) {
+  .slide { min-height: auto !important; padding: 80px 24px 40px !important; }
+}
 </style>
 </head>
 <body>
@@ -4343,8 +4449,32 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('hgv-seen'); io.unobserve(e.target); } });
   }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
   document.querySelectorAll('.slide').forEach(s => io.observe(s));
-  // first slide visible immediately
   const first = document.querySelector('.slide'); if (first) first.classList.add('hgv-seen');
+})();
+
+// Apple-style sliding nav: solid on scroll, hide on scroll-down, show on scroll-up
+(function(){
+  const nav = document.getElementById('hgv-nav');
+  if (!nav) return;
+  let lastY = window.scrollY;
+  let ticking = false;
+  const update = () => {
+    const y = window.scrollY;
+    // Solid background after 40px
+    nav.classList.toggle('scrolled', y > 40);
+    // Hide when scrolling down past 200px, reveal when scrolling up
+    if (y > 200 && y > lastY + 4) {
+      nav.classList.add('hidden');
+    } else if (y < lastY - 4) {
+      nav.classList.remove('hidden');
+    }
+    lastY = y;
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  update();
 })();
 </script>
 
