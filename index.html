@@ -1577,8 +1577,8 @@ header.apple-nav,
 #hgv-cinema .hgv-cin-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, rgba(10,9,8,0.55) 60%, rgba(10,9,8,0.92) 100%),
-    linear-gradient(180deg, rgba(10,9,8,0.55) 0%, rgba(10,9,8,0.35) 30%, rgba(10,9,8,0.65) 100%);
+    radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, rgba(10,9,8,0.25) 60%, rgba(10,9,8,0.6) 100%),
+    linear-gradient(180deg, rgba(10,9,8,0.20) 0%, rgba(10,9,8,0.10) 30%, rgba(10,9,8,0.30) 100%);
 }
 /* 7 slides × 8s each = 56s loop, with crossfade overlap */
 #hgv-cinema .hgv-cin-slide:nth-child(1) { animation-delay:   0s; }
@@ -1601,7 +1601,13 @@ header.apple-nav,
 .slide { background: transparent !important; }
 body .slide:nth-of-type(odd),
 body .slide:nth-of-type(even) {
-  background: linear-gradient(180deg, rgba(10,9,8,0.45), rgba(10,9,8,0.65)) !important;
+  background: transparent !important;
+}
+/* Light tint only on slide content so cinema shows through everywhere */
+.slide::after {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(10,9,8,0.40) 0%, rgba(10,9,8,0.55) 100%);
+  pointer-events: none;
 }
 
 @media (max-width: 540px) {
