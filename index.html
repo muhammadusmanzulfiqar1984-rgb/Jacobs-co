@@ -1743,6 +1743,119 @@ body .slide:nth-child(even) { background: linear-gradient(180deg, rgba(20,17,15,
 
 body.hgv-no-scroll { overflow: hidden; }
 
+/* ═══ MUSIC PLAYER ═══ */
+#hgv-music {
+  position: fixed; left: 24px; bottom: 24px;
+  display: flex; align-items: center; gap: 0;
+  background: linear-gradient(135deg, rgba(48,34,20,0.95), rgba(20,15,10,0.95));
+  border: 1px solid rgba(229,201,138,0.55);
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 1px rgba(255,225,160,0.18),
+    inset 0 1px 0 rgba(255,235,180,0.3),
+    0 12px 32px rgba(0,0,0,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 950;
+  overflow: hidden;
+  transition: padding .4s cubic-bezier(.2,.7,.2,1), max-width .4s cubic-bezier(.2,.7,.2,1);
+  max-width: 280px;
+  padding: 6px 14px 6px 6px;
+}
+#hgv-music.collapsed { max-width: 52px; padding: 6px; }
+#hgv-music.collapsed .hgv-music-panel { opacity: 0; pointer-events: none; transform: translateX(-10px); }
+
+.hgv-music-toggle {
+  width: 40px; height: 40px;
+  background: var(--hgv-gold, #c9a24a);
+  border: none; border-radius: 50%;
+  color: #0a0908; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 18px rgba(201,162,74,0.4);
+  transition: transform .3s;
+  position: relative;
+}
+.hgv-music-toggle:hover { transform: scale(1.06); }
+.hgv-music-toggle svg { width: 18px; height: 18px; }
+.hgv-music-eq {
+  position: absolute; inset: 0;
+  display: none; align-items: center; justify-content: center; gap: 2px;
+}
+.hgv-music-eq i {
+  display: block; width: 2px; background: #0a0908; border-radius: 1px;
+  animation: hgv-eq 0.9s ease-in-out infinite;
+}
+.hgv-music-eq i:nth-child(1) { height: 8px;  animation-delay: -0.4s; }
+.hgv-music-eq i:nth-child(2) { height: 14px; animation-delay: -0.2s; }
+.hgv-music-eq i:nth-child(3) { height: 10px; animation-delay: 0s; }
+@keyframes hgv-eq {
+  0%,100% { transform: scaleY(0.5); }
+  50%     { transform: scaleY(1.2); }
+}
+#hgv-music.playing .hgv-music-icon-note { display: none; }
+#hgv-music.playing .hgv-music-eq        { display: flex; }
+
+.hgv-music-panel {
+  display: flex; align-items: center; gap: 12px;
+  padding-left: 10px;
+  transition: opacity .35s, transform .35s;
+  white-space: nowrap;
+}
+.hgv-music-meta { display: flex; flex-direction: column; gap: 1px; }
+.hgv-music-title {
+  font-family: var(--hgv-serif, 'Playfair Display'), serif;
+  font-size: 13px; color: var(--hgv-gold-soft, #e5c98a);
+  letter-spacing: 0.02em;
+}
+.hgv-music-track {
+  font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(244,234,213,0.6);
+}
+.hgv-music-controls { display: flex; align-items: center; gap: 8px; }
+.hgv-music-play {
+  width: 30px; height: 30px;
+  background: transparent;
+  border: 1px solid rgba(229,201,138,0.55);
+  border-radius: 50%;
+  color: var(--hgv-gold-soft, #e5c98a);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, color .2s;
+}
+.hgv-music-play:hover { background: var(--hgv-gold, #c9a24a); color: #0a0908; }
+.hgv-music-play svg { width: 12px; height: 12px; }
+.hgv-music-play .pause-i { display: none; }
+#hgv-music.playing .hgv-music-play .play-i { display: none; }
+#hgv-music.playing .hgv-music-play .pause-i { display: block; }
+
+.hgv-music-vol {
+  width: 70px; height: 3px;
+  -webkit-appearance: none; appearance: none;
+  background: rgba(229,201,138,0.25);
+  border-radius: 3px; outline: none;
+  cursor: pointer;
+}
+.hgv-music-vol::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 12px; height: 12px;
+  background: var(--hgv-gold, #c9a24a);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(201,162,74,0.6);
+}
+.hgv-music-vol::-moz-range-thumb {
+  width: 12px; height: 12px; border: none;
+  background: var(--hgv-gold, #c9a24a);
+  border-radius: 50%;
+}
+
+@media (max-width: 540px) {
+  #hgv-music { left: 16px; bottom: 16px; max-width: 240px; }
+  #hgv-music.collapsed { max-width: 48px; }
+  .hgv-music-vol { width: 50px; }
+  .hgv-music-title { font-size: 12px; }
+}
+
 @media (max-width: 980px) {
   #hgv-nav .hgv-menu { display: none !important; }
   .hgv-burger { display: flex !important; }
@@ -4011,6 +4124,110 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
     0 8px 24px rgba(0,0,0,0.45) !important;
 }
 
+/* ═══ TINTED PAPER-BROWN CARDS — shiny gold edges + shimmer weave ═══ */
+.slide .card, .slide .card-red, .slide .card-gold,
+.slide .ev-card, .slide .hier-box, .slide .stat-card,
+.slide .stage, .slide .val-card, .slide .stock-panel, .slide .use-of,
+.slide[data-theme="dark"] .card, .slide[data-theme="dark"] .card-red, .slide[data-theme="dark"] .card-gold,
+.slide[data-theme="grey"] .card, .slide[data-theme="grey"] .card-red, .slide[data-theme="grey"] .card-gold,
+.slide .tile.compact, .slide .tile.tinted, .slide .tile.hero-num {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(229,201,138,0.10) 0%, transparent 50%),
+    linear-gradient(155deg,
+      rgba(78,55,32,0.78) 0%,
+      rgba(54,38,22,0.86) 35%,
+      rgba(36,26,16,0.94) 75%,
+      rgba(24,18,12,0.96) 100%) !important;
+  background-color: rgba(48,34,20,0.92) !important;
+  border: 1px solid transparent !important;
+  border-radius: 14px !important;
+  color: var(--hgv-ink, #f4ead5) !important;
+  box-shadow:
+    0 0 0 1px rgba(229,201,138,0.55),
+    inset 0 1px 0 rgba(255,220,140,0.35),
+    inset 0 -1px 0 rgba(0,0,0,0.4),
+    inset 1px 0 0 rgba(229,201,138,0.18),
+    inset -1px 0 0 rgba(0,0,0,0.35),
+    0 12px 32px rgba(0,0,0,0.55),
+    0 2px 6px rgba(0,0,0,0.4) !important;
+  overflow: hidden;
+}
+
+/* Gold-edge highlight strip (top) */
+.slide .card::before, .slide .card-red::before, .slide .card-gold::before,
+.slide .ev-card::before, .slide .hier-box::before, .slide .stat-card::before,
+.slide .stage::before, .slide .val-card::before, .slide .stock-panel::before,
+.slide .tile.compact::before, .slide .tile.tinted::before, .slide .tile.hero-num::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(229,201,138,0.18) 0%, transparent 12%),
+    repeating-linear-gradient(45deg, rgba(201,162,74,0.035) 0 2px, transparent 2px 8px),
+    repeating-linear-gradient(-45deg, rgba(201,162,74,0.025) 0 1px, transparent 1px 7px);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* Shimmer sweep across paper texture */
+.slide .card::after, .slide .card-red::after, .slide .card-gold::after,
+.slide .ev-card::after, .slide .hier-box::after, .slide .stat-card::after,
+.slide .stage::after, .slide .val-card::after, .slide .stock-panel::after,
+.slide .tile.compact::after, .slide .tile.tinted::after, .slide .tile.hero-num::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(115deg,
+    transparent 30%,
+    rgba(255,225,160,0.08) 45%,
+    rgba(255,225,160,0.18) 50%,
+    rgba(255,225,160,0.08) 55%,
+    transparent 70%);
+  background-size: 250% 250%;
+  background-position: 200% 0;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+  transition: background-position 1.4s cubic-bezier(.2,.7,.2,1);
+}
+.slide .card:hover::after, .slide .card-red:hover::after, .slide .card-gold:hover::after,
+.slide .ev-card:hover::after, .slide .hier-box:hover::after, .slide .stat-card:hover::after,
+.slide .stage:hover::after, .slide .val-card:hover::after, .slide .stock-panel:hover::after,
+.slide .tile.compact:hover::after, .slide .tile.tinted:hover::after, .slide .tile.hero-num:hover::after {
+  background-position: -100% 0;
+}
+
+/* Auto-played gentle shimmer when tile is in view */
+@keyframes hgv-paper-shimmer {
+  0%   { background-position: 200% 0; }
+  60%  { background-position: -100% 0; }
+  100% { background-position: -100% 0; }
+}
+.slide.hgv-seen .card::after, .slide.hgv-seen .tile.compact::after,
+.slide.hgv-seen .tile.tinted::after, .slide.hgv-seen .tile.hero-num::after,
+.slide.hgv-seen .ev-card::after, .slide.hgv-seen .hier-box::after, .slide.hgv-seen .stat-card::after {
+  animation: hgv-paper-shimmer 7s ease-in-out 1s infinite;
+}
+
+/* Content above shimmer layers */
+.slide .card > *, .slide .card-red > *, .slide .card-gold > *,
+.slide .ev-card > *, .slide .hier-box > *, .slide .stat-card > *,
+.slide .stage > *, .slide .val-card > *, .slide .stock-panel > *,
+.slide .tile.compact > *, .slide .tile.tinted > *, .slide .tile.hero-num > * {
+  position: relative; z-index: 2;
+}
+
+/* Hover lift with brighter gold edge */
+.slide .card:hover, .slide .card-red:hover, .slide .card-gold:hover,
+.slide .ev-card:hover, .slide .hier-box:hover, .slide .stat-card:hover,
+.slide .tile.compact:hover, .slide .tile.tinted:hover, .slide .tile.hero-num:hover {
+  transform: translateY(-4px) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,225,160,0.85),
+    inset 0 1px 0 rgba(255,235,180,0.5),
+    inset 0 -1px 0 rgba(0,0,0,0.4),
+    0 20px 48px rgba(201,162,74,0.22),
+    0 12px 32px rgba(0,0,0,0.7) !important;
+}
+
 /* Children of dark cards inherit cream text */
 .slide .card *, .slide .card-red *, .slide .card-gold *,
 .slide .auto-chart *,
@@ -4545,6 +4762,30 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.8-.7-1.4-1.7-1.6-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.3 5.2 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.4zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.4.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
 </a>
 
+<!-- HGV MUSIC PLAYER -->
+<div id="hgv-music" class="collapsed">
+  <button class="hgv-music-toggle" aria-label="Toggle music player">
+    <svg class="hgv-music-icon-note" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+    <span class="hgv-music-eq"><i></i><i></i><i></i></span>
+  </button>
+  <div class="hgv-music-panel">
+    <div class="hgv-music-meta">
+      <div class="hgv-music-title">Atmosphere</div>
+      <div class="hgv-music-track">Cinematic Ambient · Loop</div>
+    </div>
+    <div class="hgv-music-controls">
+      <button class="hgv-music-play" aria-label="Play/Pause">
+        <svg class="play-i" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="pause-i" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+      </button>
+      <input class="hgv-music-vol" type="range" min="0" max="100" value="35" aria-label="Volume">
+    </div>
+  </div>
+  <audio id="hgv-audio" loop preload="none">
+    <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d573.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
 <script>
 // HGV reveal-on-scroll
 (function(){
@@ -4596,6 +4837,50 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   });
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+
+// Music player
+(function(){
+  const wrap   = document.getElementById('hgv-music');
+  const audio  = document.getElementById('hgv-audio');
+  const toggle = wrap?.querySelector('.hgv-music-toggle');
+  const play   = wrap?.querySelector('.hgv-music-play');
+  const vol    = wrap?.querySelector('.hgv-music-vol');
+  if (!wrap || !audio || !toggle || !play || !vol) return;
+
+  audio.volume = +vol.value / 100;
+
+  const setPlaying = (p) => {
+    wrap.classList.toggle('playing', p);
+  };
+  const playPause = () => {
+    if (audio.paused) {
+      audio.play().then(()=>setPlaying(true)).catch(()=>setPlaying(false));
+    } else {
+      audio.pause(); setPlaying(false);
+    }
+  };
+
+  // Tap the round button → expand panel; if already expanded, toggle play
+  toggle.addEventListener('click', () => {
+    if (wrap.classList.contains('collapsed')) {
+      wrap.classList.remove('collapsed');
+    } else {
+      playPause();
+    }
+  });
+  play.addEventListener('click', playPause);
+  vol.addEventListener('input', () => { audio.volume = +vol.value / 100; });
+
+  audio.addEventListener('play',  () => setPlaying(true));
+  audio.addEventListener('pause', () => setPlaying(false));
+
+  // Click outside collapses panel
+  document.addEventListener('click', (e) => {
+    if (!wrap.contains(e.target) && !wrap.classList.contains('collapsed') && audio.paused) {
+      wrap.classList.add('collapsed');
+    }
+  });
 })();
 </script>
 
