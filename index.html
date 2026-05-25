@@ -4282,7 +4282,7 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
     0 8px 24px rgba(0,0,0,0.45) !important;
 }
 
-/* ═══ TINTED PAPER-BROWN CARDS — shiny gold edges + shimmer weave ═══ */
+/* ═══ UNIFIED OUTLINE CARDS — thin gold border, transparent interior ═══ */
 .slide .card, .slide .card-red, .slide .card-gold,
 .slide .ev-card, .slide .hier-box, .slide .stat-card,
 .slide .stage, .slide .val-card, .slide .stock-panel, .slide .use-of,
@@ -4292,110 +4292,136 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
 .slide .auto-chart,
 .slide .card-line-red, .slide .card-line-gold {
   position: relative;
-  background:
-    radial-gradient(ellipse at 30% 0%, rgba(229,201,138,0.10) 0%, transparent 50%),
-    linear-gradient(155deg,
-      rgba(78,55,32,0.42) 0%,
-      rgba(54,38,22,0.52) 35%,
-      rgba(36,26,16,0.62) 75%,
-      rgba(24,18,12,0.68) 100%) !important;
-  background-color: rgba(48,34,20,0.45) !important;
-  border: 1px solid transparent !important;
+  background: rgba(10,9,8,0.28) !important;
+  background-color: rgba(10,9,8,0.28) !important;
+  border: 1px solid rgba(229,201,138,0.55) !important;
   border-radius: 14px !important;
   color: var(--hgv-ink, #f4ead5) !important;
   box-shadow:
-    0 0 0 1px rgba(229,201,138,0.55),
-    inset 0 1px 0 rgba(255,220,140,0.30),
-    inset 0 -1px 0 rgba(0,0,0,0.4),
-    0 18px 44px rgba(0,0,0,0.45),
-    0 4px 12px rgba(0,0,0,0.35) !important;
+    0 0 0 1px rgba(229,201,138,0.08),
+    0 8px 28px rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 48px 36px !important;
+  text-align: center !important;
   overflow: hidden;
-  backdrop-filter: blur(10px) saturate(140%);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  animation: hgv-float 7s ease-in-out infinite;
+  transition: border-color .35s, transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s !important;
+  animation: none !important;
 }
-@keyframes hgv-float {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-3px); }
-}
-.slide .card:nth-of-type(2n), .slide .tile:nth-of-type(2n),
-.slide .ev-card:nth-of-type(2n) { animation-delay: -2.3s; }
-.slide .card:nth-of-type(3n), .slide .tile:nth-of-type(3n),
-.slide .ev-card:nth-of-type(3n) { animation-delay: -4.6s; }
 
-/* Gold-edge highlight strip (top) */
 .slide .card::before, .slide .card-red::before, .slide .card-gold::before,
 .slide .ev-card::before, .slide .hier-box::before, .slide .stat-card::before,
 .slide .stage::before, .slide .val-card::before, .slide .stock-panel::before,
-.slide .tile.compact::before, .slide .tile.tinted::before, .slide .tile.hero-num::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    linear-gradient(180deg, rgba(229,201,138,0.18) 0%, transparent 12%),
-    repeating-linear-gradient(45deg, rgba(201,162,74,0.035) 0 2px, transparent 2px 8px),
-    repeating-linear-gradient(-45deg, rgba(201,162,74,0.025) 0 1px, transparent 1px 7px);
-  pointer-events: none;
-  border-radius: inherit;
-  z-index: 0;
-}
-
-/* Shimmer sweep across paper texture */
+.slide .tile.compact::before, .slide .tile.tinted::before, .slide .tile.hero-num::before,
 .slide .card::after, .slide .card-red::after, .slide .card-gold::after,
 .slide .ev-card::after, .slide .hier-box::after, .slide .stat-card::after,
 .slide .stage::after, .slide .val-card::after, .slide .stock-panel::after,
 .slide .tile.compact::after, .slide .tile.tinted::after, .slide .tile.hero-num::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(115deg,
-    transparent 30%,
-    rgba(255,225,160,0.08) 45%,
-    rgba(255,225,160,0.18) 50%,
-    rgba(255,225,160,0.08) 55%,
-    transparent 70%);
-  background-size: 250% 250%;
-  background-position: 200% 0;
-  pointer-events: none;
-  border-radius: inherit;
-  z-index: 1;
-  transition: background-position 1.4s cubic-bezier(.2,.7,.2,1);
-}
-.slide .card:hover::after, .slide .card-red:hover::after, .slide .card-gold:hover::after,
-.slide .ev-card:hover::after, .slide .hier-box:hover::after, .slide .stat-card:hover::after,
-.slide .stage:hover::after, .slide .val-card:hover::after, .slide .stock-panel:hover::after,
-.slide .tile.compact:hover::after, .slide .tile.tinted:hover::after, .slide .tile.hero-num:hover::after {
-  background-position: -100% 0;
+  display: none !important;
 }
 
-/* Auto-played gentle shimmer when tile is in view */
-@keyframes hgv-paper-shimmer {
-  0%   { background-position: 200% 0; }
-  60%  { background-position: -100% 0; }
-  100% { background-position: -100% 0; }
-}
-.slide.hgv-seen .card::after, .slide.hgv-seen .tile.compact::after,
-.slide.hgv-seen .tile.tinted::after, .slide.hgv-seen .tile.hero-num::after,
-.slide.hgv-seen .ev-card::after, .slide.hgv-seen .hier-box::after, .slide.hgv-seen .stat-card::after {
-  animation: hgv-paper-shimmer 7s ease-in-out 1s infinite;
-}
-
-/* Content above shimmer layers */
-.slide .card > *, .slide .card-red > *, .slide .card-gold > *,
-.slide .ev-card > *, .slide .hier-box > *, .slide .stat-card > *,
-.slide .stage > *, .slide .val-card > *, .slide .stock-panel > *,
-.slide .tile.compact > *, .slide .tile.tinted > *, .slide .tile.hero-num > * {
-  position: relative; z-index: 2;
-}
-
-/* Hover lift with brighter gold edge */
 .slide .card:hover, .slide .card-red:hover, .slide .card-gold:hover,
 .slide .ev-card:hover, .slide .hier-box:hover, .slide .stat-card:hover,
 .slide .tile.compact:hover, .slide .tile.tinted:hover, .slide .tile.hero-num:hover {
-  transform: translateY(-4px) !important;
+  transform: translateY(-3px) !important;
+  border-color: rgba(255,225,160,0.95) !important;
   box-shadow:
-    0 0 0 1px rgba(255,225,160,0.85),
-    inset 0 1px 0 rgba(255,235,180,0.5),
-    inset 0 -1px 0 rgba(0,0,0,0.4),
-    0 20px 48px rgba(201,162,74,0.22),
-    0 12px 32px rgba(0,0,0,0.7) !important;
+    0 0 0 1px rgba(255,225,160,0.35),
+    0 16px 40px rgba(201,162,74,0.18),
+    0 10px 28px rgba(0,0,0,0.55) !important;
 }
+
+/* Typography inside cards — match the screenshot */
+.slide .card > .label, .slide .card > .eyebrow, .slide .card > .t-eyebrow,
+.slide .tile > .label, .slide .tile > .eyebrow, .slide .tile > .t-eyebrow,
+.slide .stat-card > .label, .slide .ev-card > .label,
+.slide .hier-box > .label, .slide .stock-panel > .label {
+  display: block;
+  font-size: 11px !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--hgv-gold, #c9a24a) !important;
+  margin-bottom: 16px !important;
+  font-weight: 500;
+}
+
+.slide .card .h1, .slide .card h1, .slide .card .v,
+.slide .card .num-hero, .slide .card .stat-num,
+.slide .tile .h1, .slide .tile h1, .slide .tile .v, .slide .tile .t-headline,
+.slide .stat-card .v, .slide .ev-card .h1, .slide .hier-box .h1,
+.slide .stock-panel .v, .slide .val-card .v {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: clamp(28px, 4vw, 44px) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.1 !important;
+  color: var(--hgv-ink, #f4ead5) !important;
+  -webkit-text-fill-color: var(--hgv-ink, #f4ead5) !important;
+  margin: 0 0 16px !important;
+  background: none !important;
+}
+
+.slide .card .small, .slide .card .body, .slide .card p,
+.slide .tile .small, .slide .tile .t-sub, .slide .tile p,
+.slide .stat-card .small, .slide .ev-card .small,
+.slide .hier-box .small, .slide .stock-panel .small {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  color: rgba(244,234,213,0.82) !important;
+  margin: 0 auto 24px !important;
+  max-width: 36ch;
+}
+
+/* CTA pill — matches "Move now" */
+.slide .card .t-cta, .slide .card a.cta, .slide .card button,
+.slide .tile .t-cta, .slide .tile a.cta,
+.slide .ev-card .t-cta, .slide .stat-card .t-cta,
+.slide .card-cta {
+  display: inline-block !important;
+  padding: 11px 28px !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  border: 1px solid rgba(229,201,138,0.55) !important;
+  color: var(--hgv-gold-soft, #e5c98a) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.12em !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  font-weight: 400 !important;
+  transition: background .25s, color .25s, transform .25s !important;
+  cursor: pointer;
+}
+.slide .card .t-cta:hover, .slide .tile .t-cta:hover,
+.slide .card a.cta:hover, .slide .tile a.cta:hover {
+  background: var(--hgv-gold, #c9a24a) !important;
+  color: #0a0908 !important;
+  transform: translateY(-1px);
+}
+
+/* Tile rows centered content with breathing space */
+.slide .card, .slide .tile.compact, .slide .tile.tinted, .slide .tile.hero-num {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 340px;
+}
+
+@media (max-width: 540px) {
+  .slide .card, .slide .ev-card, .slide .hier-box, .slide .stat-card,
+  .slide .tile.compact, .slide .tile.tinted, .slide .tile.hero-num,
+  .slide .stage, .slide .val-card, .slide .stock-panel, .slide .use-of,
+  .slide .auto-chart {
+    padding: 36px 22px !important;
+    min-height: 260px;
+  }
+  .slide .card .h1, .slide .tile .h1, .slide .tile .t-headline {
+    font-size: clamp(22px, 7vw, 32px) !important;
+  }
+}
+
+/* Gold-edge highlight strip (top) — deprecated by unified outline cards */
+.slide .card.__legacy::before { display: none; }
 
 /* Children of dark cards inherit cream text */
 .slide .card *, .slide .card-red *, .slide .card-gold *,
