@@ -1577,8 +1577,8 @@ header.apple-nav,
 #hgv-cinema .hgv-cin-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 100% 80% at 50% 50%, transparent 0%, rgba(10,9,8,0.25) 60%, rgba(10,9,8,0.6) 100%),
-    linear-gradient(180deg, rgba(10,9,8,0.20) 0%, rgba(10,9,8,0.10) 30%, rgba(10,9,8,0.30) 100%);
+    radial-gradient(ellipse 100% 80% at 50% 50%, rgba(10,9,8,0.45) 0%, rgba(10,9,8,0.65) 60%, rgba(10,9,8,0.85) 100%),
+    linear-gradient(180deg, rgba(10,9,8,0.50) 0%, rgba(10,9,8,0.40) 30%, rgba(10,9,8,0.65) 100%);
 }
 /* 7 slides × 8s each = 56s loop, with crossfade overlap */
 #hgv-cinema .hgv-cin-slide:nth-child(1) { animation-delay:   0s; }
@@ -1590,10 +1590,10 @@ header.apple-nav,
 #hgv-cinema .hgv-cin-slide:nth-child(7) { animation-delay: -48s; }
 @keyframes hgv-cin-cycle {
   0%   { opacity: 0; transform: scale(1.00); }
-  3%   { opacity: 1; }
-  14%  { opacity: 1; }
-  17%  { opacity: 0; transform: scale(1.10); }
-  100% { opacity: 0; transform: scale(1.10); }
+  4%   { opacity: 1; }
+  16%  { opacity: 1; }
+  20%  { opacity: 0; transform: scale(1.12); }
+  100% { opacity: 0; transform: scale(1.12); }
 }
 
 /* Hide per-slide backdrops since cinema layer takes over */
@@ -4391,7 +4391,7 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
     0 8px 24px rgba(0,0,0,0.45) !important;
 }
 
-/* ═══ UNIFIED OUTLINE CARDS — thin gold border, transparent interior ═══ */
+/* ═══ UNIFIED OUTLINE CARDS — mirror glass · 20% tint · bright gold corners · shimmer ═══ */
 .slide .card, .slide .card-red, .slide .card-gold,
 .slide .ev-card, .slide .hier-box, .slide .stat-card,
 .slide .stage, .slide .val-card, .slide .stock-panel, .slide .use-of,
@@ -4401,16 +4401,17 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
 .slide .auto-chart,
 .slide .card-line-red, .slide .card-line-gold {
   position: relative;
-  background: rgba(10,9,8,0.28) !important;
-  background-color: rgba(10,9,8,0.28) !important;
-  border: 1px solid rgba(229,201,138,0.55) !important;
-  border-radius: 14px !important;
+  background: rgba(10,9,8,0.20) !important;
+  background-color: rgba(10,9,8,0.20) !important;
+  border: 1px solid rgba(229,201,138,0.28) !important;
+  border-radius: 16px !important;
   color: var(--hgv-ink, #f4ead5) !important;
   box-shadow:
-    0 0 0 1px rgba(229,201,138,0.08),
-    0 8px 28px rgba(0,0,0,0.35) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+    inset 0 1px 0 rgba(255,235,180,0.18),
+    inset 0 -1px 0 rgba(0,0,0,0.35),
+    0 10px 32px rgba(0,0,0,0.40) !important;
+  backdrop-filter: blur(6px) saturate(140%);
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
   padding: 48px 36px !important;
   text-align: center !important;
   overflow: hidden;
@@ -4418,29 +4419,100 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   animation: none !important;
 }
 
+/* Bright glowing gold corner brackets */
 .slide .card::before, .slide .card-red::before, .slide .card-gold::before,
 .slide .ev-card::before, .slide .hier-box::before, .slide .stat-card::before,
 .slide .stage::before, .slide .val-card::before, .slide .stock-panel::before,
-.slide .tile.compact::before, .slide .tile.tinted::before, .slide .tile.hero-num::before,
+.slide .tile.compact::before, .slide .tile.tinted::before, .slide .tile.hero-num::before {
+  content: ''; position: absolute; inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    /* top-left bracket */
+    linear-gradient(135deg, rgba(255,225,160,0.95) 0%, rgba(255,225,160,0) 18%) top left / 80px 80px no-repeat,
+    /* top-right bracket */
+    linear-gradient(225deg, rgba(255,225,160,0.95) 0%, rgba(255,225,160,0) 18%) top right / 80px 80px no-repeat,
+    /* bottom-left bracket */
+    linear-gradient(45deg,  rgba(255,225,160,0.95) 0%, rgba(255,225,160,0) 18%) bottom left / 80px 80px no-repeat,
+    /* bottom-right bracket */
+    linear-gradient(315deg, rgba(255,225,160,0.95) 0%, rgba(255,225,160,0) 18%) bottom right / 80px 80px no-repeat;
+  mask:
+    linear-gradient(#000, #000) top left / 80px 2px no-repeat,
+    linear-gradient(#000, #000) top left / 2px 80px no-repeat,
+    linear-gradient(#000, #000) top right / 80px 2px no-repeat,
+    linear-gradient(#000, #000) top right / 2px 80px no-repeat,
+    linear-gradient(#000, #000) bottom left / 80px 2px no-repeat,
+    linear-gradient(#000, #000) bottom left / 2px 80px no-repeat,
+    linear-gradient(#000, #000) bottom right / 80px 2px no-repeat,
+    linear-gradient(#000, #000) bottom right / 2px 80px no-repeat;
+  -webkit-mask:
+    linear-gradient(#000, #000) top left / 80px 2px no-repeat,
+    linear-gradient(#000, #000) top left / 2px 80px no-repeat,
+    linear-gradient(#000, #000) top right / 80px 2px no-repeat,
+    linear-gradient(#000, #000) top right / 2px 80px no-repeat,
+    linear-gradient(#000, #000) bottom left / 80px 2px no-repeat,
+    linear-gradient(#000, #000) bottom left / 2px 80px no-repeat,
+    linear-gradient(#000, #000) bottom right / 80px 2px no-repeat,
+    linear-gradient(#000, #000) bottom right / 2px 80px no-repeat;
+  background-color: rgba(255,225,160,0.85);
+  filter: drop-shadow(0 0 6px rgba(229,201,138,0.7));
+  z-index: 1;
+  opacity: 0.85;
+}
+
+/* Continuous shimmer sweep across mirror */
 .slide .card::after, .slide .card-red::after, .slide .card-gold::after,
 .slide .ev-card::after, .slide .hier-box::after, .slide .stat-card::after,
 .slide .stage::after, .slide .val-card::after, .slide .stock-panel::after,
 .slide .tile.compact::after, .slide .tile.tinted::after, .slide .tile.hero-num::after {
-  display: none !important;
+  content: ''; position: absolute; inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(115deg,
+    transparent 30%,
+    rgba(255,225,160,0.06) 45%,
+    rgba(255,235,180,0.18) 50%,
+    rgba(255,225,160,0.06) 55%,
+    transparent 70%);
+  background-size: 220% 220%;
+  background-position: 200% 0;
+  animation: hgv-mirror-shimmer 6.5s ease-in-out infinite;
+  z-index: 2;
+}
+@keyframes hgv-mirror-shimmer {
+  0%   { background-position: 200% 0; }
+  60%  { background-position: -100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Stagger so cards shimmer in waves */
+.slide .card:nth-of-type(2n)::after, .slide .ev-card:nth-of-type(2n)::after,
+.slide .stat-card:nth-of-type(2n)::after, .slide .tile:nth-of-type(2n)::after { animation-delay: -1.8s; }
+.slide .card:nth-of-type(3n)::after, .slide .ev-card:nth-of-type(3n)::after,
+.slide .stat-card:nth-of-type(3n)::after, .slide .tile:nth-of-type(3n)::after { animation-delay: -3.6s; }
+
+.slide .card > *, .slide .card-red > *, .slide .card-gold > *,
+.slide .ev-card > *, .slide .hier-box > *, .slide .stat-card > *,
+.slide .stage > *, .slide .val-card > *, .slide .stock-panel > *,
+.slide .tile.compact > *, .slide .tile.tinted > *, .slide .tile.hero-num > * {
+  position: relative; z-index: 3;
 }
 
 .slide .card:hover, .slide .card-red:hover, .slide .card-gold:hover,
 .slide .ev-card:hover, .slide .hier-box:hover, .slide .stat-card:hover,
 .slide .tile.compact:hover, .slide .tile.tinted:hover, .slide .tile.hero-num:hover {
   transform: translateY(-3px) !important;
-  border-color: rgba(255,225,160,0.95) !important;
+  border-color: rgba(229,201,138,0.5) !important;
   box-shadow:
-    0 0 0 1px rgba(255,225,160,0.35),
+    inset 0 1px 0 rgba(255,235,180,0.3),
+    inset 0 -1px 0 rgba(0,0,0,0.4),
     0 16px 40px rgba(201,162,74,0.18),
     0 10px 28px rgba(0,0,0,0.55) !important;
 }
+.slide .card:hover::before, .slide .ev-card:hover::before, .slide .stat-card:hover::before,
+.slide .tile.compact:hover::before, .slide .tile.hero-num:hover::before { opacity: 1; }
 
-/* Typography inside cards — match the screenshot */
+/* Typography inside cards — dust gold (not yellow), refined */
 .slide .card > .label, .slide .card > .eyebrow, .slide .card > .t-eyebrow,
 .slide .tile > .label, .slide .tile > .eyebrow, .slide .tile > .t-eyebrow,
 .slide .stat-card > .label, .slide .ev-card > .label,
@@ -4449,9 +4521,10 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   font-size: 11px !important;
   letter-spacing: 0.28em !important;
   text-transform: uppercase !important;
-  color: var(--hgv-gold, #c9a24a) !important;
+  color: #b8935a !important;      /* dust gold — muted, antique */
   margin-bottom: 16px !important;
   font-weight: 500;
+  text-shadow: 0 0 12px rgba(184,147,90,0.35);
 }
 
 .slide .card .h1, .slide .card h1, .slide .card .v,
@@ -4464,10 +4537,15 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   font-weight: 500 !important;
   letter-spacing: -0.01em !important;
   line-height: 1.1 !important;
-  color: var(--hgv-ink, #f4ead5) !important;
-  -webkit-text-fill-color: var(--hgv-ink, #f4ead5) !important;
+  /* Dust-gold gradient — antique brass, not yellow */
+  background: linear-gradient(180deg, #d4b075 0%, #b8935a 45%, #8b6f3f 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
   margin: 0 0 16px !important;
-  background: none !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 1px 8px rgba(184,147,90,0.25));
 }
 
 .slide .card .small, .slide .card .body, .slide .card p,
@@ -4475,13 +4553,13 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
 .slide .stat-card .small, .slide .ev-card .small,
 .slide .hier-box .small, .slide .stock-panel .small {
   font-size: 14px !important;
-  line-height: 1.55 !important;
-  color: rgba(244,234,213,0.82) !important;
+  line-height: 1.6 !important;
+  color: rgba(220,200,170,0.78) !important;   /* warm cream, not pure white */
   margin: 0 auto 24px !important;
   max-width: 36ch;
 }
 
-/* CTA pill — matches "Move now" */
+/* CTA pill — dust gold */
 .slide .card .t-cta, .slide .card a.cta, .slide .card button,
 .slide .tile .t-cta, .slide .tile a.cta,
 .slide .ev-card .t-cta, .slide .stat-card .t-cta,
@@ -4490,24 +4568,24 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   padding: 11px 28px !important;
   border-radius: 999px !important;
   background: transparent !important;
-  border: 1px solid rgba(229,201,138,0.55) !important;
-  color: var(--hgv-gold-soft, #e5c98a) !important;
+  border: 1px solid #b8935a !important;
+  color: #d4b075 !important;
   font-size: 12px !important;
   letter-spacing: 0.12em !important;
   text-decoration: none !important;
   text-transform: none !important;
   font-weight: 400 !important;
-  transition: background .25s, color .25s, transform .25s !important;
+  transition: background .25s, color .25s, transform .25s, box-shadow .25s !important;
   cursor: pointer;
 }
 .slide .card .t-cta:hover, .slide .tile .t-cta:hover,
 .slide .card a.cta:hover, .slide .tile a.cta:hover {
-  background: var(--hgv-gold, #c9a24a) !important;
+  background: linear-gradient(135deg, #d4b075, #b8935a) !important;
   color: #0a0908 !important;
   transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(184,147,90,0.35);
 }
 
-/* Tile rows centered content with breathing space */
 .slide .card, .slide .tile.compact, .slide .tile.tinted, .slide .tile.hero-num {
   display: flex !important;
   flex-direction: column !important;
@@ -4526,6 +4604,9 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
   }
   .slide .card .h1, .slide .tile .h1, .slide .tile .t-headline {
     font-size: clamp(22px, 7vw, 32px) !important;
+  }
+  .slide .card::before, .slide .ev-card::before, .slide .tile.compact::before {
+    background-size: 50px 50px !important;
   }
 }
 
@@ -5224,10 +5305,10 @@ html, body, #app { background: var(--hgv-bg, #0a0908) !important; color: var(--h
         voice.pause();
         voice.currentTime = 0;
         voice.muted = false;
-        setTimeout(() => { voice.play().catch(()=>{}); }, 10000);
+        setTimeout(() => { voice.play().catch(()=>{}); }, 5000);
       }).catch(() => {
         // Autoplay rejected — schedule anyway; first scroll/tap will unlock
-        setTimeout(() => { voice.play().catch(()=>{}); }, 10000);
+        setTimeout(() => { voice.play().catch(()=>{}); }, 5000);
         const kick = () => { voice.play().catch(()=>{}); document.removeEventListener('pointerdown', kick); };
         document.addEventListener('pointerdown', kick, { once: true });
       });
